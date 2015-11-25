@@ -6,12 +6,6 @@
 
 <?php
 
-/* 	$db_hostname = 'localhost';
-	$db_username = 'samarc';
-	$db_userpass = 'Iworkatkoyo15';
-	$db_dbname = 'Koyo'; */
-
-
 $fName = $_POST['fName'];
 $lName = $_POST['lName'];
 $position = $_POST['ePosition'];
@@ -20,7 +14,7 @@ $type = $_POST['eType'];
 $department = $_POST['eDep'];
 $startDate = $_POST['eStart'];
 $user = strtolower(substr($fName, 0, 1) . $lName);
-$pass = pass;
+$pass = "pass";
 
 
 	 try {

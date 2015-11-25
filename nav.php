@@ -12,6 +12,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li><a href="viewEmp.php">Employee</a></li>
 		<li><a href="sendMessage.php">Message</a></li>
+		<li><a href="logout.php">Log Out</a></li>
       </ul>
     </div>
   </div>
