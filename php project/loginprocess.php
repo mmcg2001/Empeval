@@ -18,10 +18,9 @@ require_once('db_cred.php');
 	$lSql = $dbc->prepare('Select * from Employee where Username = "'. $user.'"');
 	$lSql->execute();
 	$lSql->setFetchMode(PDO::FETCH_ASSOC);
-	
-	
-
-				$row = $lSql->fetch();	
+				$nrf = true;
+				while($row = $lSql->fetch()){
+					$nrf = false;
 					$pw = $row['Password'];
 					if($pw == $pass){
 						header('Location: home.php');
@@ -38,10 +37,17 @@ require_once('db_cred.php');
 					}
 					else{
 						header('Location: login.php');
+						do_alert();
 					}
-
-			
- 		
-	
+				}
+				
+				if($nrf == true){
+					header('Location: login.php');
+				}
+				
+			 function do_alert() 
+			 {
+				echo '<script type="text/javascript">alert(Wrong username or password was entered!); </script>';
+			 }
 
 ?>

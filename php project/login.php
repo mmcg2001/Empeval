@@ -11,21 +11,14 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span> 
       </button>
-      <a class="navbar-brand" href="#">Home</a>
      </div>
     <div class="collapse navbar-collapse" id="myNavbar">
-      <!--<ul class="nav navbar-nav navbar-right">
-        <li><a href="#">Create</a></li>
-	<li><a href="#">Read</a></li>
-         <li><a href="#">Update</a></li>
-        <li><a href="#">Delete</a></li>
-      </ul>-->
      </div>
   </div>
 </nav>
 
 <head>
-<img src="koyo logo.jpg" alt="Bird">
+<img src="koyo logo.jpg" >
 <style>
 .bg-1 { 
     background-color: #004cff; /* Blue */

@@ -1,4 +1,13 @@
 <?php
+
+session_start();
+
+$type = $_SESSION['type'];
+
+if($type == ''){
+	header('Location: login.php');
+}
+	
 	require_once('nav.php');
 	require_once('bs.php');
 ?>
@@ -10,7 +19,7 @@
 	<form method = 'post' action = 'empProcess.php'>
 	  <div class = 'col-xs-4'> </div>
 		<div class = 'col-xs-4'>
-			<input  class="form-control" type = 'text' name = 'fName' placeholder = 'First Name'/>
+			<input class="form-control" type = 'text' name = 'fName' placeholder = 'First Name'/>
 		<br/>
 			<input class="form-control" type = 'text' name = 'lName' placeholder = 'Last Name'/>
 		<br/>
