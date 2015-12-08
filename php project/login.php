@@ -21,8 +21,12 @@
 <img src="koyo logo.jpg" >
 <style>
 .bg-1 { 
-    background-color: #004cff; /* Blue */
+    background-color: #3399ff; /* Blue */
     color: #0f0f0f;
+}
+
+form {
+  text-align: center;
 }
 </style>
 
@@ -33,6 +37,7 @@ href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
+  
 </head>
 <body>
 
@@ -40,21 +45,25 @@ href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 
 
 
-<h1>Employee Record/Evaluation Login</h1>
+<h1 align = 'center'>Employee Record/Evaluation Login</h1>
 
 
 <form class="form-inline" role="form" method = 'post' action = 'loginprocess.php'>
+
+
   <div class="form-group">
      <label for="user">User Name:</label>
     <input type="text" class="form-control" name = "user">
   </div>
+  <br/><br/>
   <div class="form-group">
-    <label for="pass">Password:</label>
+    <label for="pass">Password:&nbsp; </label>
     <input type="password" class="form-control" name ="pass">
   </div>
+  <br/><br/>
   <div class="checkbox">
     <label><input type="checkbox"> Remember me</label>
-  </div>
+  </div> &nbsp;
   <button type="submit" class="btn btn-default">Submit</button>
 <br>
 <br>

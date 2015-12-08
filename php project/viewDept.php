@@ -1,5 +1,5 @@
 <?php
-//starts the session	
+//starts the session
 session_start();
 //sets the variable type to the session variable type, session variable set at the time of log in
 $type = $_SESSION['type'];
@@ -7,10 +7,10 @@ $type = $_SESSION['type'];
 if($type == ''){
 	header('Location: login.php');
 }
-//reference the bootstrap, nav bar, and database information	
+//reference the bootstrap, nav bar, and database information		
 require_once('bs.php');
 require_once('nav.php');
-require_once('db_cred.php');;
+require_once('db_cred.php');
 ?>
 <html>
 <head>
@@ -32,7 +32,7 @@ require_once('db_cred.php');;
 		echo $e->getMessage();
 	}
 	//SQL query
-	$vSql = $dbc->prepare("Select * from Employee");
+	$vSql = $dbc->prepare("Select d.Department_ID, d.Department_Name, e.Emp_FName, e.Emp_LName from Department d, Employee e where d.Supervisor_ID = e.Emp_ID");
 	//running the SQL statment
 	$vSql->execute();
 	//retrieving the dataset from the query
@@ -42,28 +42,26 @@ require_once('db_cred.php');;
 	echo "<div class='container-fluid bg-2 text-center'>";
 	echo "<div class='table-responsive col-xs-12'>";
 	echo "<table id ='employee' cellpadding = '0' cellspacing='0' border='0' class='table table-striped table-bordered'>";
-		echo "<thead><tr><th class='col-xs-1'>Action</th><th class='col-xs-1'>Employee ID</th><th class='col-xs-2'>First Name</th><th class='col-xs-2'>Last Name</th><th class='col-xs-2'>Position</th><th class='col-xs-1'>Type</th><th class='col-xs-1'>Shift</th><th class='col-xs-1'>Department ID</th><th class='col-xs-2'>Start Date</th></tr></thead><tbody>";
+		echo "<thead><tr><th class='col-xs-1'>Action</th><th class='col-xs-1'>Department ID</th><th class='col-xs-2'>Department Name</th><th class='col-xs-2'>Supervisor Name</th></thead><tbody>";
 				//looping through the found data
 				while($row = $vSql->fetch()){
 				//setting a temporary variable equal to the Emp_ID			
-				$tmpID = $row['Emp_ID'];
+				$tmpID = $row['Department_ID'];
+				$fName = $row['Emp_FName'];
+				$lName = $row['Emp_LName'];
+				$name = $fName . ' ' . $lName;
+				
 					//displaying the data in the table
-					echo "<tr> <td><a href='viewProfile.php?id=$tmpID'><span class = 'glyphicon glyphicon-folder-open'></span></a>&nbsp;&nbsp;<a href='editEmp.php?id=$tmpID'<span class = 'glyphicon glyphicon-pencil'></span></a>&nbsp;&nbsp;<a href='deleteEmp.php?id=$tmpID'<span class = 'glyphicon glyphicon-remove'></span></a> </td>"
-       					 ."<td>" . $row['Emp_ID'] . "</td>"
-						 ."<td>" . $row['Emp_FName'] . "</td>"
-						 ."<td>" . $row['Emp_LName'] . "</td>"
-						 ."<td>" . $row['Emp_Position'] . "</td>"
-						 ."<td>" . $row['Emp_Type'] . "</td>"
-						 ."<td>" . $row['Emp_Shift'] . "</td>"
-						 ."<td>" . $row['Emp_DepartmentID'] . "</td>"
-						 ."<td>" . $row['Emp_StartDate'] ."</td></tr>";
+					echo "<tr> <td><a href='viewDept.php?id=$tmpID'><span class = 'glyphicon glyphicon-folder-open'></span></a>&nbsp;&nbsp;<a href='editDept.php?id=$tmpID'<span class = 'glyphicon glyphicon-pencil'></span></a>&nbsp;&nbsp;<a href='deleteDept.php?id=$tmpID'<span class = 'glyphicon glyphicon-remove'></span></a> </td>"
+       					 ."<td>" . $row['Department_ID'] . "</td>"
+						 ."<td>" . $row['Department_Name'] . "</td>"
+						 ."<td>" . $name . "</td></tr>";
 				}
 	echo "</tbody></table>";
 	//add new button
-	echo "<a href='createEmp.php' class='btn btn-warning active' role='button'>Add New</a>";
+	echo "<a href='createDept.php' class='btn btn-warning active' role='button'>Add New</a>";
 echo "</div>";
 echo "</div>"; 
 
 require_once('footer.php');
 ?>
-	

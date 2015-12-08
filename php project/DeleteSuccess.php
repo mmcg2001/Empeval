@@ -1,5 +1,5 @@
 <?php
-
+	
 //starts the session	
 session_start();
 //sets the variable type to the session variable type, session variable set at the time of log in
@@ -11,13 +11,15 @@ if($type == ''){
 //reference the bootstrap, nav bar	
 require_once('bs.php');
 require_once('nav.php');
+
 	
 ?>
 <div class="container-fluid bg-2 text-center">
 <?php
-//updated status
-echo 'Updated Successfully';
+//display deletion status
+echo 'Deleted Successfully';
   echo '<br /><br /><br />';  
+  //button to take back to the home page
   echo '<a href = "home.php" class = "btn btn-warning" role = "button">Return to Home Page</a>';
 ?>
 </div>

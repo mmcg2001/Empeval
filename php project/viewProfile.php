@@ -1,27 +1,28 @@
 <?php
+//starts the session
 session_start();
-
+//sets the variable type to the session variable type, session variable set at the time of log in
 $type = $_SESSION['type'];
-
+//check if the session has been started, and value you set. if not set send back to login page.
 if($type == ''){
 	header('Location: login.php');
 }
-	
-	require_once('nav.php');
-	require_once('bs.php');
-	require_once('db_cred.php');
+//reference the bootstrap, nav bar, and database information		
+require_once('bs.php');
+require_once('nav.php');
+require_once('db_cred.php');
 ?>
 <?php
-
+	//connecting to the database
 	try {
 	  $dbc = new PDO("mysql:host=$db_hostname; dbname=$db_dbname", $db_username, $db_userpass);
 	}
 	catch(PDOException $e) {
 		echo $e->getMessage();
 	}
-	
+	//pull the id from the URL
 	$tmpID = $_GET['id'];
-	
+	//if the variable is not blank prepare the SQL statement, else send back to the home page
 	if($tmpID > ""){
 		$eSql = $dbc->prepare("Select * from Employee where Emp_ID = '" . $tmpID . "'");		
 	}
@@ -30,11 +31,12 @@ if($type == ''){
 		exit();
 	}
 
-	
+	//run the query
 	$eSql->execute();
-	
+	//fetch the result dataset from the query
 	$eSql->setFetchMode(PDO::FETCH_ASSOC);
 	$row = $eSql->fetch();
+		//setting variables equal to the dataset
 		$id = $row['Emp_ID'];
 		$fname = $row['Emp_FName'];
 		$lname = $row['Emp_LName'];
@@ -44,6 +46,7 @@ if($type == ''){
 		$dept = $row['Emp_DepartmentID'];
 		$start = $row['Emp_StartDate'];
 		
+		//function used to send users back to the home page if the id was blank.
 		function redirect($url)
 		{
 			if (!headers_sent())
@@ -63,7 +66,7 @@ if($type == ''){
 		}
 ?>
 <head>
-
+   <!--formatting for the form-->
 	<style>
 		form {border: 2.5px solid;}
 	</style>

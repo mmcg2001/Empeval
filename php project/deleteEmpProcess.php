@@ -13,14 +13,14 @@ require_once('nav.php');
 require_once('db_cred.php');
 ?>
 <?php
-//pulling data from the previous page that was submitted, storing it into variables
-$fname = $_POST['fName'];
+/* $fname = $_POST['fName'];
 $lname = $_POST['lName'];
 $pos = $_POST['ePosition'];
 $type = $_POST['eType'];
 $shift = $_POST['eShift'];
 $dept = $_POST['eDept'];
-$start = $_POST['eStart'];
+$start = $_POST['eStart']; */
+//setting the id variable from the previously submitted form
 $id = $_POST['emp_ID'];
 
 	//connecting to the database
@@ -30,34 +30,19 @@ $id = $_POST['emp_ID'];
 	catch(PDOException $e) {
 		echo $e->getMessage();
 	}
-//SQL to update an employee
-$uSql = $dbc->prepare("Update Employee
-					   Set Emp_FName = :fName,
-						   Emp_LName = :lName,
-						   Emp_Position = :pos,
-						   Emp_Type = :type,
-						   Emp_Shift = :shift,
-						   Emp_DepartmentID = :dept,
-						   Emp_StartDate = :start
-						   Where Emp_ID = '$id'");
-	//binding the placeholders to variables by value, help protect agains SQL injection
-	$uSql->bindValue(':fName', $fname);
-	$uSql->bindValue(':lName', $lname);
-	$uSql->bindValue(':pos', $pos);
-	$uSql->bindValue(':shift', $shift);
-	$uSql->bindValue(':type', $type);
-	$uSql->bindValue(':dept', $dept);
-	$uSql->bindValue(':start', $start);
-//running the query							
-$uemp = $uSql->execute();
-//if query runs successfully send to this page, else output a message.							
-if($uemp == true){
-	redirect('UpdateSuccess.php');
+//SQL query to delete a user
+$dSql = $dbc->prepare("Delete from Employee where Emp_ID = '$id'");
+//run the query							
+$demp = $dSql->execute();
+//if delete was successful send to this page, else display a message							
+if($demp == true){
+	redirect('DeleteSuccess.php');
 }
 else{
 	echo "Did not work";
+	exit();
 }							
-	//make use of this later on... not currently used						
+//function used to send the user to the DeleteSuccessful page.						
 function redirect($url){
 	if (!headers_sent()){    
 		header('Location: '.$url);
