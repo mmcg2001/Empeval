@@ -11,10 +11,9 @@ if($type == ''){
 require_once('bs.php');
 require_once('nav.php');
 require_once('db_cred.php');
-?>
-<?php
+
 //setting the id variable from the previously submitted form
-$id = $_POST['emp_ID'];
+$id = $_POST['dept_ID'];
 
 	//connecting to the database
 	try {
@@ -24,7 +23,7 @@ $id = $_POST['emp_ID'];
 		echo $e->getMessage();
 	}
 //SQL query to delete a user
-$dSql = $dbc->prepare("Delete from Employee where Emp_ID = '$id'");
+$dSql = $dbc->prepare("Delete from Department where Department_ID = '$id'");
 //run the query							
 $demp = $dSql->execute();
 //if delete was successful send to this page, else display a message							

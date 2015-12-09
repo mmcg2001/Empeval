@@ -1,18 +1,19 @@
 <?php
-	
+//starts the session	
 session_start();
-
+//sets the variable type to the session variable type, session variable set at the time of log in
 $type = $_SESSION['type'];
-
+//check if the session has been started, and value you set. if not set send back to login page.
 if($type == ''){
 	header('Location: login.php');
 }
-	
+//referencing the bootstrap, nav bar, and database information.
 require_once('bs.php');
 require_once('nav.php');
 require_once('db_cred.php');
 ?>
 <?php
+//connecting to the database
 	try {
 	  $dbc = new PDO("mysql:host=$db_hostname; dbname=$db_dbname", $db_username, $db_userpass);
 	}
@@ -20,8 +21,10 @@ require_once('db_cred.php');
 		echo $e->getMessage();
 	}
 	
+	//getting the id passed from the URL
 	$tmpID = $_GET['id'];
 	
+	//if $tmpID is set run this query, or else send it back to the home page.
 	if($tmpID > ""){
 		$eSql = $dbc->prepare("Select * from Employee where Emp_ID = '" . $tmpID . "'");		
 	}
@@ -30,10 +33,13 @@ require_once('db_cred.php');
 		exit();
 	}
 	
+	//runs the query
 	$eSql->execute();
 	
+	//retrieves the data set
 	$eSql->setFetchMode(PDO::FETCH_ASSOC);
 	$row = $eSql->fetch();
+	//set variables equal to the data set from the query
 		$fName = $row['Emp_FName'];
 		$lName = $row['Emp_LName'];
 		$position = $row['Emp_Position'];
@@ -42,33 +48,24 @@ require_once('db_cred.php');
 		$dept = $row['Emp_DepartmentID'];
 		$start = $row['Emp_StartDate'];
 		
-	function redirect($url){
-		if (!headers_sent()){    
-			header('Location: '.$url);
-			exit;
-		}
-		else{  
-			echo '<script type="text/javascript">';
-			echo 'window.location.href="'.$url.'";';
-			echo '</script>';
-			echo '<noscript>';
-			echo '<meta http-equiv="refresh" content="0;url='.$url.'" />';
-			echo '</noscript>'; exit;
-		}
-	}
 ?>
 <html>
 <head>
+<!-- javascript to go back one page -->
 	<script>
 		function goBack() {
 			window.history.back();
 		}
 	</script>
+</head>
+<!-- main form of the program -->
 <body>
 	<div class = 'container-fluid bg-2 text-center'>
 		<form method = 'post' action = 'editEmpProcess.php'>
+		 <!-- formatting the form  --> 
 			<div class = 'col-xs-4'></div>
 				<div class = 'col-xs-4'>
+				  <!-- check if the variables hold a value, if not use a placeholder in the textbox -->
 					<div class = 'form-group'>
 						<input type = 'hidden' name ='emp_ID' value = "<?php echo $tmpID;?>" />
 						<label for="fName">First Name: </label>

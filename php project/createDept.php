@@ -21,11 +21,11 @@ try {
 catch(PDOException $e) {
 	echo $e->getMessage();
 }
-
+//Sql query to pull data from the employee table
 $sSql = $dbc->prepare("Select * from Employee"); 
-
+//running the query
 $sSql->execute();
-
+//fetching the dataset
 $sSql->setFetchMode(PDO::FETCH_ASSOC);
 
 ?>
@@ -40,7 +40,7 @@ $sSql->setFetchMode(PDO::FETCH_ASSOC);
 	</script>
 <head>
 <body>
-<!-- Form for Employee Creation -->
+<!-- Form for Department Creation -->
 <h2 align = 'center'>Create Department</h2>
 <div class="container-fluid bg-2 text-center">
 	<form method = 'post' action = 'deptProcess.php'>
@@ -48,7 +48,7 @@ $sSql->setFetchMode(PDO::FETCH_ASSOC);
 		<div class = 'col-xs-4'>
 			<input class="form-control" type = 'text' name = 'deptName' placeholder = 'Department Name'/>
 		<br/>
-		
+		    <!-- creating and using the result set from a query to populate the dropdown box -->
 			<select  class="form-control" name = "dept_Supervisor">
 				<option>Select Supervisor</option>
 	            <?php while($row = $sSql->fetch()){
@@ -60,8 +60,9 @@ $sSql->setFetchMode(PDO::FETCH_ASSOC);
 					  }
 				?>			
 			</select> 
+		<!-- Creating buttons -->	
 		<br/>
-		<input class = "btn-lg btn-success" type = 'submit' name = 'submit' />
+		    <input class = "btn-lg btn-success" type = 'submit' name = 'submit' />
 			<input class = 'btn-lg btn-warning' type = 'reset' value = 'clear'/>
 			<br/><br/>
 			<input class = 'btn-lg btn-danger' type = 'button' value = 'back' onclick = 'goBack()'/>
@@ -71,5 +72,6 @@ $sSql->setFetchMode(PDO::FETCH_ASSOC);
 <html>
 
 <?php
+//including the footer
 require_once('footer.php');
 ?>

@@ -46,7 +46,7 @@ require_once('db_cred.php');
 			echo $e->getMessage();
 		}
 		//SQL query to retrieve all information linked to a user from the variable that is set to the session variable
-		$pSql = $dbc->prepare('Select * from Employee where Username = "'. $user .'"');
+		$pSql = $dbc->prepare('Select * from Employee, Department where Username = "'. $user .'" and Emp_DepartmentID = Department_ID');
 		//run the query
 		$pSql->execute();
 		//retrieve the dataset
@@ -59,8 +59,15 @@ require_once('db_cred.php');
 		$pos = $row['Emp_Position'];
 		$type = $row['Emp_Type'];
 		$shift = $row['Emp_Shift'];
-		$dept = $row['Emp_DepartmentID'];
+		$dept = $row['Department_Name'];
 		$start = $row['Emp_StartDate'];
+		
+		$tSql = $dbc->prepare('Select * from Training_Info where Dept_Required = "'.$dept.'"');
+		
+		$tSql->execute();
+		
+		$tSql->setFetchMode(PDO::FETCH_ASSOC);
+		
 		?>
 		<!-- display the information from the dataset in a form -->
 		<form>
@@ -79,12 +86,29 @@ require_once('db_cred.php');
 	
 	</div>
 	<div class = 'col-xs-8'>
-		<form> This is another form, just for outlining at the moment!
+		<form> 
+		<?php
+		//building the table to display the data
+		echo "<div class='container-fluid bg-2 text-center'>";
+		echo "<div class='table-responsive col-xs-12'>";
+		echo "<table id ='employee' cellpadding = '0' cellspacing='0' border='0' class='table table-striped table-bordered'>";
+		echo "<thead><tr><th class='col-xs-1'>Action</th><th class='col-xs-1'>Training Title</th><th class='col-xs-2'>Department</th><th class='col-xs-2'>Evaluation Form</th><th class='col-xs-2'>Evaluation Score</th><th class='col-xs-1'>Average Score by Dept</th><th class='col-xs-1'>Overall Average</th></tr></thead><tbody>";
+				//looping through the found data
+				while($tRow = $tSql->fetch()){
+				//setting a temporary variable equal to the Emp_ID			
+				$tmpURL = $tRow['Training_URL'];
+					//displaying the data in the table
+					echo "<tr> <td><a href='training.php?id=$tmpURL'><span class = 'glyphicon glyphicon-pencil'></span></a></td>"
+       					 ."<td>" . $tRow['Training_Title'] . "</td>"
+						 ."<td>" . $tRow['Dept_Required'] ."<td></td><td></td><td></td><td></td><td>" "</td></tr>";
+				}
+		echo "</tbody></table>";
+		?>
+		
 		</form>
 	</div>
 </div>
+</html>
 <?php
 	require_once('footer.php');
 ?>
-</html>
-

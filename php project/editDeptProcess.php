@@ -13,29 +13,36 @@ require_once('nav.php');
 require_once('db_cred.php');
 ?>
 <?php
-//setting the id variable from the previously submitted form
-$id = $_POST['emp_ID'];
+$id = $_POST['dept_ID'];
+$dept = $_POST['deptName'];
+$deptSuper = $_POST['deptSuper'];
 
-	//connecting to the database
+//connecting to the database
 	try {
 	  $dbc = new PDO("mysql:host=$db_hostname; dbname=$db_dbname", $db_username, $db_userpass);
 	}
 	catch(PDOException $e) {
 		echo $e->getMessage();
 	}
-//SQL query to delete a user
-$dSql = $dbc->prepare("Delete from Employee where Emp_ID = '$id'");
-//run the query							
-$demp = $dSql->execute();
-//if delete was successful send to this page, else display a message							
-if($demp == true){
-	redirect('DeleteSuccess.php');
+//SQL to update an employee
+$uSql = $dbc->prepare("Update Department
+					   Set Department_Name = :deptName,
+						   Supervisor_ID = :deptSuper
+						   where Department_ID = '$id'");
+$uSql->bindValue(':deptName', $dept);
+$uSql->bindValue(':deptSuper', $deptSuper);
+
+//running the query							
+$uemp = $uSql->execute();
+//if query runs successfully send to this page, else output a message.							
+if($uemp == true){
+	redirect('UpdateSuccess.php');
 }
 else{
 	echo "Did not work";
-	exit();
-}							
-//function used to send the user to the DeleteSuccessful page.						
+}
+
+//function used to send to UpdateSuccess
 function redirect($url){
 	if (!headers_sent()){    
 		header('Location: '.$url);
@@ -49,5 +56,5 @@ function redirect($url){
 		echo '<meta http-equiv="refresh" content="0;url='.$url.'" />';
 		echo '</noscript>'; exit;
 	}
-}
+}							
 ?>

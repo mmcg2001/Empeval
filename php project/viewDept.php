@@ -20,7 +20,7 @@ require_once('db_cred.php');
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.10/js/jquery.dataTables.min.js"></script>
 
 <script>
-	$(document).ready(function() { $('#employee').DataTable(); } );
+	$(document).ready(function() { $('#dept').DataTable(); } );
 </script>
 </head>
 <?php
@@ -41,7 +41,7 @@ require_once('db_cred.php');
 	//building the table to display the data
 	echo "<div class='container-fluid bg-2 text-center'>";
 	echo "<div class='table-responsive col-xs-12'>";
-	echo "<table id ='employee' cellpadding = '0' cellspacing='0' border='0' class='table table-striped table-bordered'>";
+	echo "<table id ='dept' cellpadding = '0' cellspacing='0' border='0' class='table table-striped table-bordered'>";
 		echo "<thead><tr><th class='col-xs-1'>Action</th><th class='col-xs-1'>Department ID</th><th class='col-xs-2'>Department Name</th><th class='col-xs-2'>Supervisor Name</th></thead><tbody>";
 				//looping through the found data
 				while($row = $vSql->fetch()){
@@ -52,7 +52,7 @@ require_once('db_cred.php');
 				$name = $fName . ' ' . $lName;
 				
 					//displaying the data in the table
-					echo "<tr> <td><a href='viewDept.php?id=$tmpID'><span class = 'glyphicon glyphicon-folder-open'></span></a>&nbsp;&nbsp;<a href='editDept.php?id=$tmpID'<span class = 'glyphicon glyphicon-pencil'></span></a>&nbsp;&nbsp;<a href='deleteDept.php?id=$tmpID'<span class = 'glyphicon glyphicon-remove'></span></a> </td>"
+					echo "<tr> <td><a href='showDept.php?id=$tmpID'><span class = 'glyphicon glyphicon-folder-open'></span></a>&nbsp;&nbsp;<a href='editDept.php?id=$tmpID'<span class = 'glyphicon glyphicon-pencil'></span></a>&nbsp;&nbsp;<a href='deleteDept.php?id=$tmpID'<span class = 'glyphicon glyphicon-remove'></span></a> </td>"
        					 ."<td>" . $row['Department_ID'] . "</td>"
 						 ."<td>" . $row['Department_Name'] . "</td>"
 						 ."<td>" . $name . "</td></tr>";
@@ -62,6 +62,6 @@ require_once('db_cred.php');
 	echo "<a href='createDept.php' class='btn btn-warning active' role='button'>Add New</a>";
 echo "</div>";
 echo "</div>"; 
-
+//including the footer
 require_once('footer.php');
 ?>

@@ -10,6 +10,22 @@ if($type == ''){
 //reference the bootstrap, nav bar	
 require_once('bs.php');
 require_once('nav.php');
+require_once('db_cred.php');
+
+//connecting to the database
+try {
+  $dbc = new PDO("mysql:host=$db_hostname; dbname=$db_dbname", $db_username, $db_userpass);
+}
+catch(PDOException $e) {
+	echo $e->getMessage();
+}
+
+//Sql query to pull data from the employee table
+$dSql = $dbc->prepare("Select * from Department"); 
+//running the query
+$dSql->execute();
+//fetching the dataset
+$dSql->setFetchMode(PDO::FETCH_ASSOC);
 ?>
 
 <html>
@@ -44,7 +60,16 @@ require_once('nav.php');
 				   <option value="Koyo">Koyo</option>
 			</select>
 		<br/>
-			<input class="form-control" type = 'text' name = 'eDep' placeholder = 'Department ID'/>
+			<!-- creating and using the result set from a query to populate the dropdown box -->
+			<select  class="form-control" name = "eDep">
+				<option>Select Department</option>
+	            <?php while($row = $dSql->fetch()){
+						$dept_ID = $row['Department_ID'];
+					    $deptName = $row['Department_Name'];
+					    echo "<option value='".$dept_ID."'>".$deptName."</option>";
+					  }
+				?>			
+			</select> 
 		<br/>
 			<input class="form-control" type = 'date' name = 'eStart'  placeholder = 'mm/dd/yyyy'/>
 		<br/>
@@ -57,3 +82,6 @@ require_once('nav.php');
 </div>
 </body>
 </html>
+<?php
+require_once('footer.php');
+?>

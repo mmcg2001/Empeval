@@ -24,7 +24,7 @@ require_once('db_cred.php');
 	$tmpID = $_GET['id'];
 	//if the variable is not blank prepare the SQL statement, else send back to the home page
 	if($tmpID > ""){
-		$eSql = $dbc->prepare("Select * from Employee where Emp_ID = '" . $tmpID . "'");		
+		$eSql = $dbc->prepare("Select * from Employee, Department where Emp_ID = '" . $tmpID . "' and Emp_DepartmentID = Department_ID");		
 	}
 	else{
 		redirect('home.php');
@@ -43,7 +43,7 @@ require_once('db_cred.php');
 		$pos = $row['Emp_Position'];
 		$type = $row['Emp_Type'];
 		$shift = $row['Emp_Shift'];
-		$dept = $row['Emp_DepartmentID'];
+		$dept = $row['Department_Name'];
 		$start = $row['Emp_StartDate'];
 		
 		//function used to send users back to the home page if the id was blank.
@@ -89,8 +89,12 @@ require_once('db_cred.php');
 			
 		</form>
 	</div>
-	<div class = 'col-xs-8'>
-		<form> This is another form, just for outlining at the moment!
+	<div class = 'col-xs-4'>
+		<form> This is where the completed evaluations will go!
+		</form>
+	</div>
+	<div class = 'col-xs-4'>
+		<form> This is where the incomplete evaluations will go
 		</form>
 	</div>
 </div>

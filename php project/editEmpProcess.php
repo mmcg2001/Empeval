@@ -57,7 +57,7 @@ if($uemp == true){
 else{
 	echo "Did not work";
 }							
-	//make use of this later on... not currently used						
+	//sends to UpdateSuccess.php						
 function redirect($url){
 	if (!headers_sent()){    
 		header('Location: '.$url);
