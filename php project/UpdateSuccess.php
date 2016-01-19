@@ -11,14 +11,15 @@ if($type == ''){
 //reference the bootstrap, nav bar	
 require_once('bs.php');
 require_once('nav.php');
-	
+
+$id = $_SESSION['id'];
 ?>
 <div class="container-fluid bg-2 text-center">
 <?php
 //updated status
 echo 'Updated Successfully';
   echo '<br /><br /><br />';  
-  echo '<a href = "home.php" class = "btn btn-warning" role = "button">Return to Home Page</a>';
+  echo '<a href = "viewProfile.php?id='.$id.'" class = "btn btn-warning" role = "button">Return to Home Page</a>';
 ?>
 </div>
 

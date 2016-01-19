@@ -19,10 +19,19 @@ try {
 	catch(PDOException $e) {
 		echo $e->getMessage();
 	}
+	
+	//retrieving the encryption key
+	$KeySQL = 'SELECT EncryptKey from SystemSettings';
+	$KSQL = $dbc->query($KeySQL);
+	$KSQL->setFetchMode(PDO::FETCH_ASSOC);
+	$GetKey =$KSQL->fetch();
+	
+	$enc_key = $GetKey['EncryptKey'];
+	
 	//setting local variable to the Session variable
-	$user = $_SESSION['user'];
+	$user = $_GET['id'];
 	//SQL query to retrieve a users information, most importantly the password
-	$pwSql = $dbc->prepare('Select * from Employee where Username = "'. $user.'"');
+	$pwSql = $dbc->prepare("Select *,AES_DECRYPT(Password,'$enc_key') as passw from Employee where Emp_ID = '". $user."'");
 	//running the query
 	$pwSql->execute();
 	//retrieve the dataset from query
@@ -52,7 +61,7 @@ try {
 					$pw = $_POST['pass'];
 					$npw1 = $_POST['newPass'];
 					$npw2 = $_POST['newPW'];
-					$pass = $row['Password'];
+					$pass = $row['passw'];
 					
 					//if local variable pass does not equal what the database house do not allow the change, else allow the update
 					if($pw != $pass){
@@ -65,9 +74,10 @@ try {
 						else{
 							//SQL query to update the password field
 							$uSql = $dbc->prepare("Update Employee
-									 Set Password = '$npw1'
-									 where Username = '$user'");
+									 Set Password = AES_ENCRYPT(:npw1, '$enc_key')
+									 where Emp_ID = '$user'");
 							//run the query
+							$uSql->bindValue(':npw1', $npw1);
 							$upw = $uSql->execute();
 							//if it is true send the user to UpdateSuccess, else do nothing.
 							if($upw == true){

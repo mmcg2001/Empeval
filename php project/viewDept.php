@@ -7,6 +7,9 @@ $type = $_SESSION['type'];
 if($type == ''){
 	header('Location: login.php');
 }
+
+$myID = $_SESSION['id'];
+$myUserType = $_SESSION['uType'];
 //reference the bootstrap, nav bar, and database information		
 require_once('bs.php');
 require_once('nav.php');
@@ -22,6 +25,15 @@ require_once('db_cred.php');
 <script>
 	$(document).ready(function() { $('#dept').DataTable(); } );
 </script>
+
+<!-- disable the clickable glyphs -->
+<style>
+.not-active {
+ pointer-events: none;
+ cursor: default;
+}
+</style>
+
 </head>
 <?php
 	//connecting to the database
@@ -32,7 +44,7 @@ require_once('db_cred.php');
 		echo $e->getMessage();
 	}
 	//SQL query
-	$vSql = $dbc->prepare("Select d.Department_ID, d.Department_Name, e.Emp_FName, e.Emp_LName from Department d, Employee e where d.Supervisor_ID = e.Emp_ID");
+	$vSql = $dbc->prepare("Select Department_ID, Department_Name, Supervisor_ID, Emp_FName, Emp_LName from Department , Employee where Supervisor_ID = Emp_ID");
 	//running the SQL statment
 	$vSql->execute();
 	//retrieving the dataset from the query
@@ -51,8 +63,16 @@ require_once('db_cred.php');
 				$lName = $row['Emp_LName'];
 				$name = $fName . ' ' . $lName;
 				
+				if($myID == $row['Supervisor_ID'] || $myUserType == "admin"){					
+					$status = 'active';
+				}
+				else{
+					$status = 'not-active';
+				}
+				
+								
 					//displaying the data in the table
-					echo "<tr> <td><a href='showDept.php?id=$tmpID'><span class = 'glyphicon glyphicon-folder-open'></span></a>&nbsp;&nbsp;<a href='editDept.php?id=$tmpID'<span class = 'glyphicon glyphicon-pencil'></span></a>&nbsp;&nbsp;<a href='deleteDept.php?id=$tmpID'<span class = 'glyphicon glyphicon-remove'></span></a> </td>"
+					echo "<tr> <td><a href='showDept.php?id=$tmpID' data-toggle='tooltip' title='View Department'><span class = 'glyphicon glyphicon-folder-open'></span></a>&nbsp;&nbsp;<a href='editDept.php?id=$tmpID' data-toggle='tooltip' title='Edit Employee'class = $status><span class = 'glyphicon glyphicon-pencil'></span></a>&nbsp;&nbsp;<a href='deleteDept.php?id=$tmpID' data-toggle='tooltip' title='Delete Department' class = $status><span class = 'glyphicon glyphicon-remove'></span></a></td>"
        					 ."<td>" . $row['Department_ID'] . "</td>"
 						 ."<td>" . $row['Department_Name'] . "</td>"
 						 ."<td>" . $name . "</td></tr>";

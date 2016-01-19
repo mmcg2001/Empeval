@@ -1,32 +1,51 @@
 <?php
-//starts the session	
+
+//starts the session
 session_start();
 //sets the variable type to the session variable type, session variable set at the time of log in
+$id = $_SESSION['id'];
 $type = $_SESSION['type'];
+$uType = $_SESSION['uType'];
 //check if the session has been started, and value you set. if not set send back to login page.
 if($type == ''){
 	header('Location: login.php');
 }
-//referencing the bootstrap, nav bar, and database information.
+
+if($uType != 'admin'){
+	header('Location: notAuthorized.php');
+}
+//reference the bootstrap, nav bar, and database information		
+
+require_once('db_cred.php');
+
+//connecting to the database
+try {
+  $dbc = new PDO("mysql:host=$db_hostname; dbname=$db_dbname", $db_username, $db_userpass);
+}
+catch(PDOException $e) {
+	echo $e->getMessage();
+}
+$vSql = $dbc->prepare("Select * from Employee, Department where Emp_ID = '$id' and Department_ID = Emp_DepartmentID");
+	//running the SQL statement
+	$vSql->execute();
+	//retrieving the dataset from the query
+	$vSql->setFetchMode(PDO::FETCH_ASSOC);
+	$vRow = $vSql->fetch();
+	if($id != $vRow['Supervisor_ID'] && $vRow['Emp_UserType'] != "admin"){					
+		header("Location: viewProfile.php?id=$id");
+	}
 require_once('bs.php');
 require_once('nav.php');
-require_once('db_cred.php');
 ?>
 <?php
-//connecting to the database
-	try {
-	  $dbc = new PDO("mysql:host=$db_hostname; dbname=$db_dbname", $db_username, $db_userpass);
-	}
-	catch(PDOException $e) {
-		echo $e->getMessage();
-	}
+
 	
 	//getting the id passed from the URL
 	$tmpID = $_GET['id'];
 	
 	//if $tmpID is set run this query, or else send it back to the home page.
 	if($tmpID > ""){
-		$eSql = $dbc->prepare("Select * from Employee where Emp_ID = '" . $tmpID . "'");		
+		$eSql = $dbc->prepare("Select * from Employee, Department where Emp_ID = '" . $tmpID . "' AND Department_ID = Emp_DepartmentID");		
 	}
 	else{
 		redirect('home.php');
@@ -47,7 +66,22 @@ require_once('db_cred.php');
 		$shift = $row['Emp_Shift'];
 		$dept = $row['Emp_DepartmentID'];
 		$start = $row['Emp_StartDate'];
+		$deptName = $row['Department_Name'];
+		$current = $row['Current'];
 		
+		if($current == '1'){
+			$curr = 'Yes';
+		}
+		else{
+			$curr = 'No';
+		}
+		
+//Sql query to pull data from the employee table
+$dSql = $dbc->prepare("Select * from Department"); 
+//running the query
+$dSql->execute();
+//fetching the dataset
+$dSql->setFetchMode(PDO::FETCH_ASSOC);
 ?>
 <html>
 <head>
@@ -127,14 +161,27 @@ require_once('db_cred.php');
 								</select>
 							<?php } ?> 
 					</div>
+															
 					<div class = 'form-group'>
-						<label for="eDept">Department: </label>
-						<?php if($dept>""){ ?>
-							<input type="text" class="form-control" name="eDept" id="eDept"  value="<?php echo $dept; ?>">
+					<label for="eDept">Department: </label>
+					<?php if($dept > ""){ ?>
+						<select name = "eDept" class = "form-control">
+							 <option value = <?php echo $dept; ?>> <?php echo $deptName; ?></option>
+							 	<option>---------------</option>
+								<?php while($row = $dSql->fetch()){
+										$dept_ID = $row['Department_ID'];
+										$deptN = $row['Department_Name'];
+										echo "<option value='".$dept_ID."'>".$deptN."</option>";
+									}
+								?>	
+						</select>
 						<?php } else { ?>
-							<input type="text" class="form-control" name="eDept" id="eDept"  placeholder="Department">
-						<?php } ?>
+							<select name = "eDept" class = "form-control">
+								<option value =" ">Select</option>
+							</select>
+						<?php } ?> 
 					</div>
+					
 					<div class = 'form-group'>
 						<label for="eStart">Start Date: </label>
 						<?php if($position>""){ ?>
@@ -142,7 +189,27 @@ require_once('db_cred.php');
 						<?php } else { ?>
 							<input type="date" class="form-control" name="eStart" id="eStart"  placeholder="Start Date">
 						<?php } ?>
-						<br/>
+					</div>
+						
+					<div class = 'form-group'>	
+						<label for="curr">Current Employee: </label>
+						<?php if($shift > ""){ ?>
+							<select name = "curr" class = "form-control">
+								<option value="<?php echo $curr ?>"><?php echo $curr; ?></option>
+								<?php if($curr == "Yes"){ ?>
+								<option value="0">No</option>
+								<?php } else if ($curr == "No") { ?>
+								<option value="1">Yes</option>
+								<?php } ?>
+							</select>
+							<?php } else { ?>
+								<select name = "curr" class = "form-control">
+									<option value ="1">Yes</option>
+									<option value ="0">No</option>
+								</select>
+							<?php } ?> 
+					</div>
+					<br/>
 					<div class = 'form-group'>
 						<input class = "btn-lg btn-success" type = 'submit' name = 'submit' />
 						<input class = 'btn-lg btn-danger' onclick='goBack()' type = 'button' name ='back' value = 'back'/>					

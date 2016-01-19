@@ -32,8 +32,7 @@ form {
 
 <title>Employee Training</title>
 
-  <link rel="stylesheet"
-href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
@@ -52,12 +51,12 @@ href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 
 
   <div class="form-group">
-     <label for="user">User Name:</label>
+     <label for="user">Username:</label>
     <input type="text" class="form-control" name = "user">
   </div>
   <br/><br/>
   <div class="form-group">
-    <label for="pass">Password:&nbsp; </label>
+    <label for="pass">Password:</label>
     <input type="password" class="form-control" name ="pass">
   </div>
   <br/><br/>

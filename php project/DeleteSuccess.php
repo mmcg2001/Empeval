@@ -12,6 +12,7 @@ if($type == ''){
 require_once('bs.php');
 require_once('nav.php');
 
+$id = $_SESSION['id'];
 	
 ?>
 <div class="container-fluid bg-2 text-center">
@@ -20,7 +21,7 @@ require_once('nav.php');
 echo 'Deleted Successfully';
   echo '<br /><br /><br />';  
   //button to take back to the home page
-  echo '<a href = "home.php" class = "btn btn-warning" role = "button">Return to Home Page</a>';
+  echo '<a href = "viewProfile.php?id='.$id.'" class = "btn btn-warning" role = "button">Return to Home Page</a>';
 ?>
 </div>
 

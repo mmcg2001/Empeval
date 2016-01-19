@@ -1,15 +1,19 @@
 <?php
-//starts the session	
+//starts the session
 session_start();
 //sets the variable type to the session variable type, session variable set at the time of log in
 $type = $_SESSION['type'];
+$uType = $_SESSION['uType'];
+$id = $_SESSION['id'];
 //check if the session has been started, and value you set. if not set send back to login page.
 if($type == ''){
 	header('Location: login.php');
 }
-//reference the bootstrap, nav bar	
-require_once('bs.php');
-require_once('nav.php');
+if($uType != 'admin'){
+	header('Location: notAuthorized.php');
+}
+//reference database information		
+
 require_once('db_cred.php');
 
 //connecting to the database
@@ -19,6 +23,20 @@ try {
 catch(PDOException $e) {
 	echo $e->getMessage();
 }
+
+$vSql = $dbc->prepare("Select * from Employee, Department where Emp_ID = '$id' and Department_ID = Emp_DepartmentID");
+	//running the SQL statement
+	$vSql->execute();
+	//retrieving the dataset from the query
+	$vSql->setFetchMode(PDO::FETCH_ASSOC);
+	$vRow = $vSql->fetch();
+	if( $vRow['Emp_UserType'] != "admin"){					
+		header("Location: viewProfile.php?id=$id");
+	}
+
+//reference the bootstrap, nav bar.
+require_once('bs.php');
+require_once('nav.php');
 
 //Sql query to pull data from the employee table
 $dSql = $dbc->prepare("Select * from Department"); 
@@ -58,6 +76,11 @@ $dSql->setFetchMode(PDO::FETCH_ASSOC);
 			<select  class="form-control" name = "eType">
 	               <option value="Temp">Temp</option>
 				   <option value="Koyo">Koyo</option>
+			</select>
+		<br/>
+			<select  class="form-control" name = "eUType">
+	               <option value="admin">Admin</option>
+				   <option value="user">User</option>
 			</select>
 		<br/>
 			<!-- creating and using the result set from a query to populate the dropdown box -->

@@ -1,25 +1,43 @@
 <?php
-//starts the session	
+
+//starts the session
 session_start();
 //sets the variable type to the session variable type, session variable set at the time of log in
+$id = $_SESSION['id'];
 $type = $_SESSION['type'];
+$uType = $_SESSION['uType'];
 //check if the session has been started, and value you set. if not set send back to login page.
 if($type == ''){
 	header('Location: login.php');
 }
-//referencing the bootstrap, nav bar, and database information.
+if($uType != 'admin'){
+	header('Location: notAuthorized.php');
+}
+//reference the bootstrap, nav bar, and database information		
+
+require_once('db_cred.php');
+
+//connecting to the database
+try {
+  $dbc = new PDO("mysql:host=$db_hostname; dbname=$db_dbname", $db_username, $db_userpass);
+}
+catch(PDOException $e) {
+	echo $e->getMessage();
+}
+$vSql = $dbc->prepare("Select * from Employee, Department where Emp_ID = '$id' and Department_ID = Emp_DepartmentID");
+	//running the SQL statement
+	$vSql->execute();
+	//retrieving the dataset from the query
+	$vSql->setFetchMode(PDO::FETCH_ASSOC);
+	$vRow = $vSql->fetch();
+	if($id != $vRow['Supervisor_ID'] && $vRow['Emp_UserType'] != "admin"){					
+		header("Location: viewProfile.php?id=$id");
+	}
 require_once('bs.php');
 require_once('nav.php');
-require_once('db_cred.php');
 ?>
 <?php
-//connecting to the database
-	try {
-	  $dbc = new PDO("mysql:host=$db_hostname; dbname=$db_dbname", $db_username, $db_userpass);
-	}
-	catch(PDOException $e) {
-		echo $e->getMessage();
-	}
+
 	
 	//getting the id passed from the URL
 	$tmpID = $_GET['id'];

@@ -3,16 +3,18 @@
 session_start();
 //sets the variable type to the session variable type, session variable set at the time of log in
 $type = $_SESSION['type'];
+$uType = $_SESSION['uType'];
+$id = $_SESSION['id'];
 //check if the session has been started, and value you set. if not set send back to login page.
 if($type == ''){
 	header('Location: login.php');
 }
-//reference the bootstrap, nav bar, and database information		
-require_once('bs.php');
-require_once('nav.php');
+if($uType != 'admin'){
+	header('Location: notAuthorized.php');
+}
+//reference database information		
+
 require_once('db_cred.php');
-?>
-<?php
 
 //connecting to the database
 try {
@@ -21,6 +23,24 @@ try {
 catch(PDOException $e) {
 	echo $e->getMessage();
 }
+
+$vSql = $dbc->prepare("Select * from Employee, Department where Emp_ID = '$id' and Department_ID = Emp_DepartmentID");
+	//running the SQL statement
+	$vSql->execute();
+	//retrieving the dataset from the query
+	$vSql->setFetchMode(PDO::FETCH_ASSOC);
+	$vRow = $vSql->fetch();
+	if( $vRow['Emp_UserType'] != "admin"){					
+		header("Location: viewProfile.php?id=$id");
+	}
+
+//reference the bootstrap, nav bar.
+require_once('bs.php');
+require_once('nav.php');
+?>
+<?php
+
+
 //Sql query to pull data from the employee table
 $sSql = $dbc->prepare("Select * from Employee"); 
 //running the query
@@ -41,8 +61,9 @@ $sSql->setFetchMode(PDO::FETCH_ASSOC);
 <head>
 <body>
 <!-- Form for Department Creation -->
-<h2 align = 'center'>Create Department</h2>
+
 <div class="container-fluid bg-2 text-center">
+	<h2>Create Department</h2><br/>	
 	<form method = 'post' action = 'deptProcess.php'>
 	  <div class = 'col-xs-4'> </div>
 		<div class = 'col-xs-4'>

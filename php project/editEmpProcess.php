@@ -22,6 +22,7 @@ $shift = $_POST['eShift'];
 $dept = $_POST['eDept'];
 $start = $_POST['eStart'];
 $id = $_POST['emp_ID'];
+$curr = $_POST['curr'];
 
 	//connecting to the database
 	try {
@@ -38,7 +39,8 @@ $uSql = $dbc->prepare("Update Employee
 						   Emp_Type = :type,
 						   Emp_Shift = :shift,
 						   Emp_DepartmentID = :dept,
-						   Emp_StartDate = :start
+						   Emp_StartDate = :start,
+						   Current = :curr
 						   Where Emp_ID = '$id'");
 	//binding the placeholders to variables by value, help protect agains SQL injection
 	$uSql->bindValue(':fName', $fname);
@@ -48,6 +50,7 @@ $uSql = $dbc->prepare("Update Employee
 	$uSql->bindValue(':type', $type);
 	$uSql->bindValue(':dept', $dept);
 	$uSql->bindValue(':start', $start);
+	$uSql->bindValue(':curr', $curr);
 //running the query							
 $uemp = $uSql->execute();
 //if query runs successfully send to this page, else output a message.							

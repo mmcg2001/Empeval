@@ -36,6 +36,13 @@ require_once('db_cred.php');
 	$eSql->setFetchMode(PDO::FETCH_ASSOC);
 	$row = $eSql->fetch();
 	
+	if($myID == $row['Supervisor_ID'] || $myUserType == "admin"){					
+		$status = 'active';
+	}
+	else{
+		$status = 'not-active';
+	}
+	
 	$id = $row['Department_ID'];
 	$deptName = $row['Department_Name'];
 	$fName = $row['Emp_FName'];
@@ -76,6 +83,14 @@ require_once('db_cred.php');
 <script>
 	$(document).ready(function() { $('#dept').DataTable(); } );
 </script>
+
+<!-- disable the clickable glyphs -->
+<style>
+.not-active {
+ pointer-events: none;
+ cursor: default;
+}
+</style>
 </head>
 <div class="container-fluid bg-2 text-center">
 	<h2 align = 'center'><b><?php echo $deptName . " Department"; ?></b></h2>	
@@ -85,13 +100,13 @@ require_once('db_cred.php');
 			<label for="ID">Department ID: </label> <?php echo $id; ?> <br/> 
 			<label for="Department Name">Department Name: </label> <?php echo $deptName; ?> <br/>
 			<label for="Supervisor Name">Supervisor Name: </label> <?php echo $name; ?> <br/>
-			<?php echo "<a href='editDept.php?id=$id' class='btn btn-warning active' role='button'>Edit Info</a>"; ?> <br/><br/>
+			<?php echo "<a href='editDept.php?id=$id'  class='btn btn-warning active' role='button'>Edit Info</a>"; ?> <br/><br/>
 		</form>
 	</div>
 	<div class='col-xs-8'>
 			<?php
 				
-				 $vSql = $dbc->prepare("Select * from Employee where Emp_DepartmentID = '".$id."'" );
+				 $vSql = $dbc->prepare("Select * from Employee, Department where Emp_DepartmentID = '".$id."' and Department_ID = Emp_DepartmentID" );
 				
 				$vSql->execute();
 				
@@ -103,8 +118,12 @@ require_once('db_cred.php');
 				while($r = $vSql->fetch()){
 				//setting a temporary variable equal to the Emp_ID			
 				$tmpID = $r['Emp_ID'];
+				
+				//displaying the data in the table
+					
+					
 					//displaying the data in the table
-					echo "<tr> <td><a href='viewProfile.php?id=$tmpID'><span class = 'glyphicon glyphicon-folder-open'></span></a>&nbsp;&nbsp;<a href='editEmp.php?id=$tmpID'<span class = 'glyphicon glyphicon-pencil'></span></a>&nbsp;&nbsp;<a href='deleteEmp.php?id=$tmpID'<span class = 'glyphicon glyphicon-remove'></span></a> </td>"
+					echo "<tr> <td><a href='viewProfile.php?id=$tmpID' data-toggle='tooltip' title='View Employee Profile' class = $status><span class = 'glyphicon glyphicon-folder-open'></span></a>&nbsp;&nbsp;<a href='editEmp.php?id=$tmpID' data-toggle='tooltip' title='Edit Employee' class = $status><span class = 'glyphicon glyphicon-pencil'></span></a>&nbsp;&nbsp;<a href='deleteEmp.php?id=$tmpID' data-toggle='tooltip' title='Delete Employee' class = $status><span class = 'glyphicon glyphicon-remove'></span></a> </td>"
        					 ."<td>" . $r['Emp_ID'] . "</td>"
 						 ."<td>" . $r['Emp_FName'] . "</td>"
 						 ."<td>" . $r['Emp_LName'] . "</td>"

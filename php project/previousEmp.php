@@ -45,7 +45,7 @@ $myUserType = $_SESSION['uType'];
 		echo $e->getMessage();
 	}
 	//SQL query
-	$vSql = $dbc->prepare("Select * from Employee, Department where Department_ID = Emp_DepartmentID and Current = '1'");
+	$vSql = $dbc->prepare("Select * from Employee, Department where Department_ID = Emp_DepartmentID and Current = '0'");
 	//running the SQL statement
 	$vSql->execute();
 	//retrieving the dataset from the query
@@ -61,7 +61,7 @@ $myUserType = $_SESSION['uType'];
 				//setting a temporary variable equal to the Emp_ID			
 				$tmpID = $row['Emp_ID'];
 					//displaying the data in the table
-					if($myID == $row['Supervisor_ID'] || $myUserType == "admin"){					
+					if($myUserType == "admin"){					
 						$status = 'active';
 					}
 					else{
@@ -69,7 +69,7 @@ $myUserType = $_SESSION['uType'];
 					}
 					
 										
-					echo "<tr> <td><a href='viewProfile.php?id=$tmpID' data-toggle='tooltip' title='View Profile'><span class = 'glyphicon glyphicon-folder-open'></span></a>&nbsp;&nbsp;<a href='editEmp.php?id=$tmpID' data-toggle='tooltip' title='Edit Employee' class = $status><span class = 'glyphicon glyphicon-pencil'></span></a>&nbsp;&nbsp;<a href='directMessage.php?tID=$tmpID' data-toggle='tooltip' title='Send Message' ><span class = 'glyphicon glyphicon-envelope'></span></a> </td>"
+					echo "<tr> <td><a href='viewProfile.php?id=$tmpID' data-toggle='tooltip' title='View Profile'><span class = 'glyphicon glyphicon-folder-open'></span></a>&nbsp;&nbsp;<a href='editEmp.php?id=$tmpID' data-toggle='tooltip' title='Edit Employee' class = $status><span class = 'glyphicon glyphicon-pencil'></span></a>&nbsp;&nbsp;<a href='deleteEmp.php?id=$tmpID' data-toggle='tooltip' title='Delete Employee' class = $status><span class = 'glyphicon glyphicon-remove'></span></a></td>"
        					 ."<td>" . $row['Emp_ID'] . "</td>"
 						 ."<td>" . $row['Emp_FName'] . "</td>"
 						 ."<td>" . $row['Emp_LName'] . "</td>"
@@ -83,10 +83,8 @@ $myUserType = $_SESSION['uType'];
 				}
 	echo "</tbody></table>";
 	//add new button
-	echo "<a href='createEmp.php' class='btn btn-warning active' role='button'>Add New</a>";
 echo "</div>";
 echo "</div>"; 
 
 require_once('footer.php');
 ?>
-	
