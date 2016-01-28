@@ -48,41 +48,70 @@ $dSql->setFetchMode(PDO::FETCH_ASSOC);
 
 <html>
 <head>
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+  <script src="//code.jquery.com/jquery-1.9.1.js"></script>
+  <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+  <link rel="stylesheet" href="/resources/demos/style.css">
 <!-- Javascript for the back button -->
 	<script>
 		function goBack() {
 			window.history.back();
 		}
 	</script>
+	<script>
+		  $(function() {
+			$( "#datepicker" ).datepicker({
+			  dateFormat: 'yy-mm-dd',
+			  changeMonth: true,
+			  changeYear: true
+			});
+		  });
+	</script>
 <head>
 <body>
 <!-- Form for Employee Creation -->
-<h2 align = 'center'>Create Employee</h2>
+
 <div class="container-fluid bg-2 text-center">
+	<h2 align = 'center'>Create Employee</h2>
 	<form method = 'post' action = 'empProcess.php'>
 	  <div class = 'col-xs-4'> </div>
 		<div class = 'col-xs-4'>
+			<div class="form-group">
+				<label for="fName">First Name</label>
 			<input class="form-control" type = 'text' name = 'fName' placeholder = 'First Name'/>
-		<br/>
+			</div>
+			<div class="form-group">
+				<label for="lName">Last Name</label>
 			<input class="form-control" type = 'text' name = 'lName' placeholder = 'Last Name'/>
-		<br/>
+			</div>
+			<div class="form-group">
+				<label for="Position">Position</label>	
 			<input class="form-control" type = 'text' name = 'ePosition' placeholder = 'Position'/>
-		<br/>
+			</div>
+			<div class="form-group">
+				<label for="eShift">Shift</label>
 			<select  class="form-control" name = "eShift">
 	               <option value="First">First</option>
 				   <option value="Second">Second</option>
 			</select>
-		<br/>
+			</div>
+			<div class="form-group">
+				<label for="Type">Employee Type</label>	
 			<select  class="form-control" name = "eType">
 	               <option value="Temp">Temp</option>
 				   <option value="Koyo">Koyo</option>
 			</select>
-		<br/>
+			</div>
+			<div class="form-group">
+				<label for="eUType">User Type</label>
 			<select  class="form-control" name = "eUType">
-	               <option value="admin">Admin</option>
 				   <option value="user">User</option>
+				   <option value="admin">Admin</option>
 			</select>
-		<br/>
+			</div>
+			
+			<div class="form-group">
+				<label for="eDep">Department</label>	
 			<!-- creating and using the result set from a query to populate the dropdown box -->
 			<select  class="form-control" name = "eDep">
 				<option>Select Department</option>
@@ -93,9 +122,12 @@ $dSql->setFetchMode(PDO::FETCH_ASSOC);
 					  }
 				?>			
 			</select> 
-		<br/>
-			<input class="form-control" type = 'date' name = 'eStart'  placeholder = 'mm/dd/yyyy'/>
-		<br/>
+			</div>
+			<div class="form-group">
+				<label for="eStart">Start Date</label>	
+			<input type="text" class="form-control" name="eStart" id="datepicker" placeholder="Date">
+			</div>
+			
 			<input class = "btn-lg btn-success" type = 'submit' name = 'submit' />
 			<input class = 'btn-lg btn-danger' type = 'reset' value = 'clear'/>
 			<br/><br/>

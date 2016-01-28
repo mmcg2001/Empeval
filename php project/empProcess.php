@@ -4,6 +4,7 @@
 session_start();
 //sets the variable type to the session variable type, session variable set at the time of log in
 $type = $_SESSION['type'];
+$sid = $_SESSION['id'];
 //check if the session has been started, and value you set. if not set send back to login page.
 if($type == ''){
 	header('Location: login.php');
@@ -65,20 +66,38 @@ $curr = "1";
 	//$iSql->bindValue(':pass',  $pass));
 	$chk = $iSql->execute();
 	
-	$tw = date('Y-m-d',strtotime("+ 14 days". $startDate));
-	$td = date('Y-m-d',strtotime("+ 30 days". $startDate));
-	$nd = date('Y-m-d',strtotime("+ 90 days". $startDate));
-	$iTSql = $dbc->prepare("Insert into Timed_Evaluations (Employee_ID, TwoWeek, ThirtyDays, NinetyDays) VALUES ($id, '$tw', '$td', '$nd' )");
-	$tchk = $iTSql->execute();
+
 	
 	//if it runs correctly 
-	if($chk == TRUE && $tchk == TRUE){
-		echo "Employee had been entered.";
+	if($chk == TRUE){
+		echo "<div class = 'container-fluid bg-2 text-center'>";
+		echo "Employee has been entered.";
 		echo "<br/><br/>";
-		echo "<a href='viewEmp.php'> Click to Return to Employee list</a>";
+		echo "<a href='viewEmp.php' class='btn btn-danger' role='button'>View Employee List</a>&nbsp;&nbsp;<a href = 'createEmp.php' class='btn btn-warning' role='button'>Create Another Employee</a>&nbsp;&nbsp;<a href = 'viewProfile.php?id=$sid' class='btn btn-success' role='button'>Return Home</a>";
+		echo "</div>";
+		$sSql = $dbc->prepare("Select * from Employee, Department, Training_Info where Emp_ID = '$id' and Emp_DepartmentID = Department_ID and Dept_Required = Department_Name");
+		$sSql->execute();
+		$sSql->setFetchMode(PDO::FETCH_ASSOC);
+		while ($row = $sSql->fetch()){
+			$emp = $row['Emp_ID'];
+			$instruction = $row['Training_ID'];
+			
+			$aSql = $dbc->prepare("Insert Into Evaluation(Employee_ID, Training_ID, Evaluation_Score, Eval_Status) Values ('$emp', '$instruction', '0', '0')");
+			
+			$chk = $aSql->execute();
+			
+			
+			$tw = date('Y-m-d',strtotime("+ 14 days"));
+			$td = date('Y-m-d',strtotime("+ 30 days"));
+			$nd = date('Y-m-d',strtotime("+ 90 days"));
+			
+			
+			$iTSql = $dbc->prepare("Insert into Timed_Evaluations(Employee_ID, Training_ID, TwoWeek, ThirtyDays, NinetyDays) VALUES ('$emp', '$instruction', '$tw', '$td', '$nd' )");
+			$tchk = $iTSql->execute();
+		}
 	}
 	else{
 		echo "did not work.";
 	} 
-
+require_once('footer.php');
 ?>

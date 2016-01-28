@@ -36,22 +36,23 @@ if($type == ''){
 	$mSql->execute();
 	
 	$mSql->setFetchMode(PDO::FETCH_ASSOC);
-
-	$uSql = $dbc->prepare("Update Messages
-						   Set M_Read = '1'
-						   where M_ID = $tmpID");
-	$chk = $uSql->execute();
-	if($chk != true){
-		echo "Update did not work";
+	$mRow = $mSql->fetch();
+	if($id == $mRow['To_ID']){
+		$uSql = $dbc->prepare("Update Messages
+							   Set M_Read = '1'
+							   where M_ID = $tmpID");
+		$chk = $uSql->execute();
+		if($chk != true){
+			echo "Update did not work";
+		}
 	}
 	
-	$row = $mSql->fetch();
-	 if($id != $row['To_ID'] && $id != $row['From_ID']){
+	 if($id != $mRow['To_ID'] && $id != $mRow['From_ID']){
 		redirect('notAuthorized.php');
 	}
 	else{
 	
-	$sSql = $dbc->prepare("Select Emp_FName, Emp_LName from Employee where Emp_ID = " .$row['From_ID']);
+	$sSql = $dbc->prepare("Select Emp_FName, Emp_LName from Employee where Emp_ID = " .$mRow['From_ID']);
 	
 	$sSql->execute();
 	
@@ -66,14 +67,14 @@ if($type == ''){
 		 echo "<form method = 'post' action = 'reply.php'>";
 		 echo "<div class = 'col-xs-3'></div>";
 		 echo "<div class = 'col-xs-6'>";
-		 echo "<h1>". $row['Subject']. ' From: '. $name. "</h1>";
+		 echo "<h1>". $mRow['Subject']. ' From: '. $name. "</h1>";
 		 echo "<div class = 'form-group'>";
-		 echo "<textarea rows = '4' cols = '25' class = 'form-control' name = 'message'  disabled>".$row['Message']."</textarea>";
+		 echo "<textarea rows = '4' cols = '25' class = 'form-control' name = 'message'  disabled>".$mRow['Message']."</textarea>";
 		 echo "</div>";
-		 echo "<input type = 'hidden' name = 'subject' value = '".$row['Subject']."' />";
-		 echo "<input type = 'hidden' name = 'from' value = '".$row['From_ID']."'/>";
-		 echo "<input type = 'hidden' name = 'to' value = '".$row['To_ID']."'/>";
-		 if($id == $row['To_ID']){
+		 echo "<input type = 'hidden' name = 'subject' value = '".$mRow['Subject']."' />";
+		 echo "<input type = 'hidden' name = 'from' value = '".$mRow['From_ID']."'/>";
+		 echo "<input type = 'hidden' name = 'to' value = '".$mRow['To_ID']."'/>";
+		 if($id == $mRow['To_ID']){
 		 echo "<input class = 'btn-lg btn-success' type = 'submit' value = 'Reply'/>";
 		 echo "&nbsp;";
 		 }

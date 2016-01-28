@@ -3,6 +3,7 @@
 session_start();
 //sets the variable type to the session variable type, session variable set at the time of log in
 $type = $_SESSION['type'];
+$sid = $_SESSION['id'];
 //check if the session has been started, and value you set. if not set send back to login page.
 if($type == ''){
 	header('Location: login.php');
@@ -34,9 +35,11 @@ $chk = $iSql->execute();
 	
 	//if it runs correctly 
 	if($chk == TRUE){
-		echo "Department had been entered.";
+	echo "<div class = 'container-fluid bg-2 text-center'>";
+		echo "Department has been entered.";
 		echo "<br/><br/>";
-		echo "<a href='viewDept.php'> Click to Return Department List</a>";
+		echo "<a href='viewDept.php' class='btn btn-danger' role='button'>View Department List</a>&nbsp;&nbsp;<a href = 'createDept.php' class='btn btn-warning' role='button'>Create Another Department</a>&nbsp;&nbsp;<a href = 'viewProfile.php?id=$sid' class='btn btn-success' role='button'>Return Home</a>";
+		echo "</div>";
 	}
 	else{
 		echo "did not work.";

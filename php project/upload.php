@@ -36,7 +36,9 @@ require_once('nav.php');
 	<form action = 'fileProcess.php' method = 'post' enctype='multipart/form-data'/>
 
 	<div>
-		<label for = 'userfile'>Upload a file:</label>
+		<label for = 'userfile'>Upload a file:</label><br/>
+		<input type = 'radio' name = 'choice' value = 'Evaluation'/> Evaluation
+		<input type = 'radio' name = 'choice' value = 'Work'/> Work Instruction <br/>
 		<input type = 'file' name = 'userfile' id = 'userfile'/><br/><br/>
 		<input type = 'submit' class = 'btn-lg btn-success' name = 'selection' value = 'Upload'/>
 		<input class = 'btn-lg btn-danger' onclick='goBack()' type = 'button' name ='back' value = 'Back'/>

@@ -21,6 +21,7 @@ $type = $_POST['eType'];
 $shift = $_POST['eShift'];
 $dept = $_POST['eDept'];
 $start = $_POST['eStart'];
+$end = $_POST['eEnd'];
 $id = $_POST['emp_ID'];
 $curr = $_POST['curr'];
 
@@ -40,6 +41,7 @@ $uSql = $dbc->prepare("Update Employee
 						   Emp_Shift = :shift,
 						   Emp_DepartmentID = :dept,
 						   Emp_StartDate = :start,
+						   Emp_EndDate = :end,
 						   Current = :curr
 						   Where Emp_ID = '$id'");
 	//binding the placeholders to variables by value, help protect agains SQL injection
@@ -50,6 +52,7 @@ $uSql = $dbc->prepare("Update Employee
 	$uSql->bindValue(':type', $type);
 	$uSql->bindValue(':dept', $dept);
 	$uSql->bindValue(':start', $start);
+	$uSql->bindValue(':end', $end);
 	$uSql->bindValue(':curr', $curr);
 //running the query							
 $uemp = $uSql->execute();

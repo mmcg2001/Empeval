@@ -55,7 +55,7 @@ $myUserType = $_SESSION['uType'];
 	echo "<div class='container-fluid bg-2 text-center'>";
 	echo "<div class='table-responsive col-xs-12'>";
 	echo "<table id ='employee' cellpadding = '0' cellspacing='0' border='0' class='table table-striped table-bordered'>";
-		echo "<thead><tr><th class='col-xs-1'>Action</th><th class='col-xs-1'>Employee ID</th><th class='col-xs-2'>First Name</th><th class='col-xs-1'>Last Name</th><th class='col-xs-2'>Position</th><th class='col-xs-1'>Type</th><th class='col-xs-1'>Shift</th><th class='col-xs-1'>Department Name</th><th class='col-xs-2'>Start Date</th><th class='col-xs-2'>User Name</th></tr></thead><tbody>";
+		echo "<thead><tr><th class='col-xs-1'>Action</th><th class='col-xs-1'>Employee ID</th><th class='col-xs-1'>First Name</th><th class='col-xs-1'>Last Name</th><th class='col-xs-2'>Position</th><th class='col-xs-1'>Type</th><th class='col-xs-1'>Shift</th><th class='col-xs-1'>Department Name</th><th class='col-xs-2'>Start Date</th><th class='col-xs-2'>End Date</th></tr></thead><tbody>";
 				//looping through the found data
 				while($row = $vSql->fetch()){
 				//setting a temporary variable equal to the Emp_ID			
@@ -78,7 +78,7 @@ $myUserType = $_SESSION['uType'];
 						 ."<td>" . $row['Emp_Shift'] . "</td>"
 						 ."<td>" . $row['Department_Name'] . "</td>"
 						 ."<td>" . $row['Emp_StartDate'] ."</td>"
-						 ."<td>" . $row['Username'] ."</td></tr>";
+						 ."<td>" . $row['Emp_EndDate'] ."</td></tr>";
 					
 				}
 	echo "</tbody></table>";

@@ -63,7 +63,7 @@ if($type == ''){
 					$lName = $fRow['Emp_LName'];
 					$name = $fName . ' ' . $lName;
 					
-						echo "<tr> <td><a href='showMessage.php?id=$tmpID' data-toggle='tooltip' title='View Message'><span class = 'glyphicon glyphicon-folder-open'></span></a>&nbsp;&nbsp;</span></a>&nbsp;&nbsp;<a href='deleteMessage.php?id=$tmpID' data-toggle='tooltip' title='Delete Message'><span class = 'glyphicon glyphicon-remove'></span></a></td>"
+						echo "<tr> <td><a href='showMessage.php?id=$tmpID' data-toggle='tooltip' title='View Message'><span class = 'glyphicon glyphicon-folder-open'></span></a>&nbsp;&nbsp;</span></a></td>"
        					 ."<td>" . $name . "</td>"
 						 ."<td><a href ='showMessage.php?id=$tmpID' data-toggle = 'tootip' title = 'View Message'>" . $row['Subject'] . "</a></td>"
 						 ."<td>" . $row['Sent_Date'] . "</td></tr>";

@@ -49,13 +49,13 @@ if($type == ''){
 	echo "<div class='container-fluid bg-2 text-center'>";
 	echo "<div class = 'col-xs-3'></div>";
 	echo "<div class='table-responsive col-xs-6'>";
-	echo "<h1>Inbox</h1><br/>";
+	echo "<h1>Outbox</h1><br/>";
 	echo "<table id ='message' cellpadding = '0' cellspacing='0' border='0' class='table table-striped table-bordered'>";
-		echo "<thead><tr><th class='col-xs-1'>Action</th><th class='col-xs-1'>From</th><th class='col-xs-2'>Subject</th><th class='col-xs-2'>Date</th></thead><tbody>";
+		echo "<thead><tr><th class='col-xs-1'>Action</th><th class='col-xs-1'>To</th><th class='col-xs-2'>Subject</th><th class='col-xs-2'>Date</th></thead><tbody>";
 				//looping through the found data
 				while($row = $sSql->fetch()){
 				$tmpID = $row['M_ID'];
-				$fSql = $dbc->prepare("Select Emp_FName, Emp_LName from Employee where Emp_ID = '".$row['From_ID']."'");
+				$fSql = $dbc->prepare("Select Emp_FName, Emp_LName from Employee where Emp_ID = '".$row['To_ID']."'");
 				$fSql->execute();
 				$fSql->setFetchMode(PDO::FETCH_ASSOC);
 				$fRow = $fSql->fetch();
@@ -63,7 +63,7 @@ if($type == ''){
 					$lName = $fRow['Emp_LName'];
 					$name = $fName . ' ' . $lName;
 					
-						echo "<tr> <td><a href='showMessage.php?id=$tmpID' data-toggle='tooltip' title='View Message'><span class = 'glyphicon glyphicon-folder-open'></span></a>&nbsp;&nbsp;</span></a>&nbsp;&nbsp;<a href='deleteMessage.php?id=$tmpID' data-toggle='tooltip' title='Delete Message'><span class = 'glyphicon glyphicon-remove'></span></a></td>"
+						echo "<tr> <td><a href='showMessage.php?id=$tmpID' data-toggle='tooltip' title='View Message'><span class = 'glyphicon glyphicon-folder-open'></span></a></td>"
        					 ."<td>" . $name . "</td>"
 						 ."<td><a href ='showMessage.php?id=$tmpID' data-toggle = 'tootip' title = 'View Message'>" . $row['Subject'] . "</a></td>"
 						 ."<td>" . $row['Sent_Date'] . "</td></tr>";

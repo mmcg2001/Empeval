@@ -66,6 +66,13 @@ require_once('nav.php');
 		$shift = $row['Emp_Shift'];
 		$dept = $row['Emp_DepartmentID'];
 		$start = $row['Emp_StartDate'];
+		if($row['Emp_EndDate'] == '0000-00-00'){
+			$end = 'End Date';
+		}
+		else{
+			$end = $row['Emp_EndDate'];
+		}
+		$end = $row['Emp_EndDate'];
 		$deptName = $row['Department_Name'];
 		$current = $row['Current'];
 		
@@ -188,6 +195,15 @@ $dSql->setFetchMode(PDO::FETCH_ASSOC);
 							<input type="date" class="form-control" name="eStart" id="eStart"  value="<?php echo $start; ?>">
 						<?php } else { ?>
 							<input type="date" class="form-control" name="eStart" id="eStart"  placeholder="Start Date">
+						<?php } ?>
+					</div>
+					
+					<div class = 'form-group'>
+						<label for="eEnd">End Date: </label>
+						<?php if($position>""){ ?>
+							<input type="date" class="form-control" name="eEnd" id="eEnd"  value="<?php echo $end; ?>">
+						<?php } else { ?>
+							<input type="date" class="form-control" name="eEnd" id="eEnd"  placeholder="End Date">
 						<?php } ?>
 					</div>
 						

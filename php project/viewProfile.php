@@ -120,6 +120,10 @@ require_once('db_cred.php');
 			echo"<h2 align = 'center'><b>". $fname . ' ' . $lname . "'s Profile</b></h2>";
 		}
 	?>
+
+
+
+
 	<div class = 'col-xs-4'>
 		<form id = 'form-div'>
 			<h4 align = 'center'><font color = 'FFFFFF'> Personal Information </font></h4>
@@ -170,7 +174,7 @@ require_once('db_cred.php');
 		echo "<thead><tr><th class='col-xs-1'>Powerpoint Instruction</th><th class='col-xs-1'>Work Instruction Title</th><th class='col-xs-2'>Department</th><th class='col-xs-2'>Evaluation Form</th><th class='col-xs-2'>Evaluation Score</th><th class='col-xs-1'>Average Score by Dept</th><th class='col-xs-1'>Overall Average</th></tr></thead><tbody>";
 				//looping through the found data
 				while($tRow = $tSql->fetch()){
-				//setting a temporary variable equal to the Emp_ID			
+				//setting a temporary variable equal to the Emp_ID	
 				$tmpURL = $tRow['Training_URL'];
 				$tmpEval = $tRow['Evaluation_URL'];
 					//displaying the data in the table
@@ -211,23 +215,40 @@ require_once('db_cred.php');
 		echo "<thead><tr><th class='col-xs-1'>Powerpoint Instruction</th><th class='col-xs-1'>Work Instruction Title</th><th class='col-xs-2'>Department</th><th class='col-xs-2'>Evaluation Form</th><th class='col-xs-2'>Evaluation Score</th><th class='col-xs-1'>Average Score by Dept</th><th class='col-xs-1'>Overall Average</th></tr></thead><tbody>";
 				//looping through the found data
 				while($uRow = $uSql->fetch()){
-				//setting a temporary variable equal to the Emp_ID			
+				//setting a temporary variable equal to the Emp_ID	
+				$tID = $uRow['Training_ID'];
 				$tmpURL = $uRow['Training_URL'];
 				$tmpEval = $uRow['Evaluation_URL'];
 					//displaying the data in the table
-					echo "<tr> <td><a href='training.php?id=$tmpURL' style='color: 990000'><span class = 'glyphicon glyphicon-blackboard'></span></a></td>"
+					echo "<tr> <td><a href='training.php?id=$tmpURL' style='color: 990000'><span class = 'glyphicon glyphicon-blackboard'></span></a>&nbsp;&nbsp<a href='javascript:AlertIt();' style = 'color: 990000'><span class = 'glyphicon glyphicon-remove'></span></a></td>"
        					 ."<td>" . $uRow['Training_Title'] . "</td>"
 						 ."<td>" . $uRow['Dept_Required'] ."</td>"
 						 ."<td><a href='eval.php?id=$tmpEval'>" . $tmpEval ."</a></td>"
-						 ."<td>". $uRow['Evaluation_Score']."</td></tr>";
-				}
+						 ."<td>". $uRow['Evaluation_Score']."</td></tr>";	
+?>
+    	 <script type="text/javascript">
+			function AlertIt() {
+			var answer = confirm ("Do you want to unassign the training?")
+			if (answer)
+			window.location="unassignTraining.php?tmpID=<?php echo $uRow['Employee_ID']; ?>&training=<?php echo $tID; ?>";
+			}
+		</script>
+
+	<?php			}	
 		echo "</tbody></table>";
-		?>
+		
+	?>
+		
+
+		
 		</div>
 	 </div>
     </div>
   </div>
 </div>
+<?php
+	require_once('overall.php');
+?>
 </form>
 </div>
 </div>

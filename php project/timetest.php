@@ -35,7 +35,7 @@ catch(PDOException $e) {
 
 </head>
 <?php
-$tSql = $dbc->prepare("Select Emp_ID, Emp_FName, Emp_LName, TwoWeek from Timed_Evaluations, Employee where Employee_ID = Emp_ID and Current = '1'");
+$tSql = $dbc->prepare("Select e.Emp_ID, e.Emp_FName, e.Emp_LName, t.TwoWeek, i.Training_Title from Timed_Evaluations t, Employee e, Training_Info i, Evaluation v where e.Current = '1' and v.Eval_Status = '0' and t.Employee_ID = e.Emp_ID and i.Training_ID = t.Training_ID  and v.Employee_ID = e.Emp_ID");
 $tSql->execute();
 $tSql->setFetchMode(PDO::FETCH_ASSOC);
 	//building the table to display the data
@@ -44,7 +44,7 @@ $tSql->setFetchMode(PDO::FETCH_ASSOC);
 	echo "<div class='table-responsive col-xs-4'>";
 	echo "<table id ='utwoweeks' cellpadding = '0' cellspacing='0' border='0' class='table table-striped table-bordered'>";
 	echo "<caption align = 'bottom'><font color = '0f0f0f'> Two Week Evaluations Due </font></caption>";
-	echo "<thead><tr><th class='col-xs-2'>Employee Name</th><th class = 'col-xs-2'>2 weeks</th></tr></thead><tbody>";
+	echo "<thead><tr><th class='col-xs-2'>Employee Name</th><th class = 'col-xs-2'>2 weeks</th><th class = 'col-xs-2'>Training Title</th></tr></thead></tr></thead><tbody>";
 
 		while($row = $tSql->fetch()){
 		// true if my_date is more than a month ago
@@ -52,9 +52,10 @@ $tSql->setFetchMode(PDO::FETCH_ASSOC);
 			$fName = $row['Emp_FName'];
 			$lName = $row['Emp_LName'];
 			$name = $fName . ' ' . $lName;
-			if(date('Y-m-d',strtotime("+ 7 days")) >= date('Y-m-d', strtotime($row['TwoWeek']))&& date('Y-m-d', strtotime('- 1 day')) <= date('Y-m-d', strtotime($row['TwoWeek']))){
+			if(date('Y-m-d',strtotime("+ 7 days")) >= date('Y-m-d', strtotime($row['TwoWeek']))&& date('Y-m-d', strtotime('+ 4 days')) <= date('Y-m-d', strtotime($row['TwoWeek']))){
 			echo "<tr> <td> <a href='viewProfile.php?id=$tmpID' data-toggle='tooltip' title='View Profile'>". $name . "</a></td>"
-				 . "<td>" . $row['TwoWeek'] ."</td></tr>";
+				 . "<td>" . $row['TwoWeek'] ."</td>"
+				 . "<td>". $row['Training_Title'] ."</td></tr>";
 			 }
 
 		}
@@ -62,7 +63,7 @@ $tSql->setFetchMode(PDO::FETCH_ASSOC);
 			echo "</tbody></table>";
 		echo "</div>";
 
-$thSql = $dbc->prepare("Select Emp_ID, Emp_FName, Emp_LName, ThirtyDays from Timed_Evaluations, Employee where Employee_ID = Emp_ID and Current = '1'");
+$thSql = $dbc->prepare("Select e.Emp_ID, e.Emp_FName, e.Emp_LName, t.ThirtyDays, i.Training_Title from Timed_Evaluations t, Employee e, Training_Info i, Evaluation v where e.Current = '1' and v.Eval_Status = '0' and t.Employee_ID = e.Emp_ID and i.Training_ID = t.Training_ID  and v.Employee_ID = e.Emp_ID");
 $thSql->execute();
 $thSql->setFetchMode(PDO::FETCH_ASSOC);
 		//building the table to display the data
@@ -70,15 +71,16 @@ $thSql->setFetchMode(PDO::FETCH_ASSOC);
 	echo "<div class='table-responsive col-xs-4'>";
 	echo "<table id ='uthirtydays' cellpadding = '0' cellspacing='0' border='0' class='table table-striped table-bordered'>";	
 	echo "<caption align = 'bottom'><font color = '0f0f0f'> 30-Day Evaluations Due </font></caption>";
-	echo "<thead><tr><th class='col-xs-2'>Employee Name</th><th class = 'col-xs-2'>30 Days</th></tr></thead><tbody>";
+	echo "<thead><tr><th class='col-xs-2'>Employee Name</th><th class = 'col-xs-2'>30 Days</th><th class = 'col-xs-2'>Training Title</th></tr></thead></tr></thead><tbody>";
 		while($thRow = $thSql->fetch()){
 			$thID = $thRow['Emp_ID'];
 			$thFName = $thRow['Emp_FName'];
 			$thLName = $thRow['Emp_LName'];
 			$thName = $thFName . ' ' . $thLName;
-			if(date('Y-m-d',strtotime("+ 7 days")) >= date('Y-m-d', strtotime($thRow['ThirtyDays'])) && date('Y-m-d', strtotime('- 1 day')) <= date('Y-m-d', strtotime($thRow['ThirtyDays']))){
+			if(date('Y-m-d',strtotime("+ 7 days")) >= date('Y-m-d', strtotime($thRow['ThirtyDays'])) && date('Y-m-d', strtotime('+ 4 days')) <= date('Y-m-d', strtotime($thRow['ThirtyDays']))){
 			echo "<tr> <td> <a href='viewProfile.php?id=$thID' data-toggle='tooltip' title='View Profile'>". $thName . "</a></td>"
-				 . "<td>" . $thRow['ThirtyDays'] ."</td></tr>";
+				 . "<td>" . $thRow['ThirtyDays'] ."</td>"
+				 . "<td>". $thRow['Training_Title'] ."</td></tr>";
 			 }
 		}
 
@@ -86,7 +88,7 @@ $thSql->setFetchMode(PDO::FETCH_ASSOC);
 	//echo "</div>";
 echo "</div>";
 
-$nSql = $dbc->prepare("Select Emp_ID, Emp_FName, Emp_LName, NinetyDays from Timed_Evaluations, Employee where Employee_ID = Emp_ID and Current = '1'");
+$nSql = $dbc->prepare("Select e.Emp_ID, e.Emp_FName, e.Emp_LName, t.NinetyDays, i.Training_Title from Timed_Evaluations t, Employee e, Training_Info i, Evaluation v where e.Current = '1' and v.Eval_Status = '0' and t.Employee_ID = e.Emp_ID and i.Training_ID = t.Training_ID  and v.Employee_ID = e.Emp_ID");
 $nSql->execute();
 $nSql->setFetchMode(PDO::FETCH_ASSOC);
 
@@ -95,15 +97,16 @@ $nSql->setFetchMode(PDO::FETCH_ASSOC);
 	echo "<div class='table-responsive col-xs-4'>";
 	echo "<table id ='uninetydays' cellpadding = '0' cellspacing='0' border='0' class='table table-striped table-bordered'>";	
 	echo "<caption align = 'bottom'><font color = '0f0f0f'> 90-Day Evaluations Due </font></caption>";
-	echo "<thead><tr><th class='col-xs-2'>Employee Name</th><th class = 'col-xs-2'>90 Days</th></tr></thead><tbody>";
+	echo "<thead><tr><th class='col-xs-2'>Employee Name</th><th class = 'col-xs-2'>90 Days</th><th class = 'col-xs-2'>Training Title</th></tr></thead></tr></thead><tbody>";
 		while($nRow = $nSql->fetch()){
 			$nID = $nRow['Emp_ID'];
 			$nFName = $nRow['Emp_FName'];
 			$nLName = $nRow['Emp_LName'];
 			$nName = $nFName . ' ' . $nLName;
-			if(date('Y-m-d',strtotime("+ 7 days")) >= date('Y-m-d', strtotime($nRow['NinetyDays'])) && date('Y-m-d', strtotime('- 1 day')) <= date('Y-m-d', strtotime($nRow['NinetyDays']))){
-			echo "<tr> <td> <a href='viewProfile.php?id=$nID' data-toggle='tooltip' title='View Profile'>". $nName . "</a> </td>"
-				 . "<td>" . $nRow['NinetyDays'] ."</td></tr>";
+			if(date('Y-m-d',strtotime("+ 7 days")) >= date('Y-m-d', strtotime($nRow['NinetyDays'])) && date('Y-m-d', strtotime(' + 4 days')) <= date('Y-m-d', strtotime($nRow['NinetyDays']))){
+			echo "<tr> <td> <a href='viewProfile.php?id=$nID' data-toggle='tooltip' title='View Profile'>". $nName . "</a></td>"
+				 . "<td>" . $nRow['NinetyDays'] ."</td>"
+				 . "<td>". $nRow['Training_Title'] ."</td></tr>";
 			 }
 		}
 	
